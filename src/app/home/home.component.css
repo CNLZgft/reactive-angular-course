@@ -5,22 +5,3 @@
     margin: 0 auto;
 }
 
-
-
-
-.course-card {
-  margin: 20px 10px;
-}
-
-.course-actions {
-  display: flex;
-  justify-content: center;
-}
-
-
-.course-actions button {
-  display: flex;
-  justify-content: center;
-  margin-right: 5px;
-}
-
