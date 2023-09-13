@@ -36,7 +36,7 @@ export class HomeComponent implements OnInit {
     const courses$ = this.coursesService.loadAllCourses().pipe(
       map((courses) => courses.sort(sortCoursesBySeqNo)),
       catchError((err) => {
-        const message = "Could not load the messages. ERROR --> ";
+        const message = "Could not load the messages";
         this.messagesService.showErrors(message);
         console.log(message, err);
         return throwError(err);
