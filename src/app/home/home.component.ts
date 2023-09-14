@@ -5,6 +5,7 @@ import { catchError, finalize, map } from "rxjs/operators";
 import { CoursesService } from "../services/courses.service";
 import { LoadingService } from "../loading/loading.service";
 import { MessagesService } from "../messages/messages.service";
+import { CourseStore } from "../services/courses.store";
 
 @Component({
   selector: "home",
@@ -19,7 +20,8 @@ export class HomeComponent implements OnInit {
   constructor(
     private coursesService: CoursesService,
     private loadingService: LoadingService,
-    private messagesService: MessagesService
+    private messagesService: MessagesService,
+    private courseStore: CourseStore
   ) {}
 
   ngOnInit() {
@@ -30,33 +32,32 @@ export class HomeComponent implements OnInit {
     //para mostar el icono de carga se puede usar dos funciones para setear manualmente
     //el boolean a true o false con loadinOn() y loaadingOff()
     //this.loadingService.loadingOn();
-
     //para evitar múltiples llamadas al servicio, se usa el "sharereplay() --> courses.service.ts"
     //de otra forma se haría una llamada por cada subscripcion
-    const courses$ = this.coursesService.loadAllCourses().pipe(
-      map((courses) => courses.sort(sortCoursesBySeqNo)),
-      catchError((err) => {
-        const message = "Could not load the messages";
-        this.messagesService.showErrors(message);
-        console.log(message, err);
-        return throwError(err);
-      })
-      //finalize(() => this.loadingService.loadingOff())
-    );
-
-    const loadCourses$ = this.loadingService.showLoaderUntilCompleted(courses$);
-
-    //console.log(n);
-
-    this.beginnerCourses$ = loadCourses$.pipe(
-      map((courses) =>
-        courses.filter((courses) => courses.category === "BEGINNER")
-      )
-    );
-    this.advancedCourses$ = loadCourses$.pipe(
-      map((courses) =>
-        courses.filter((courses) => courses.category === "ADVANCED")
-      )
-    );
+    //MODO STATELESS
+    // const courses$ = this.coursesService.loadAllCourses().pipe(
+    //   map((courses) => courses.sort(sortCoursesBySeqNo)),
+    //   catchError((err) => {
+    //     const message = "Could not load the messages";
+    //     this.messagesService.showErrors(message);
+    //     console.log(message, err);
+    //     return throwError(err);
+    //   })
+    //   //finalize(() => this.loadingService.loadingOff())
+    // );
+    // const loadCourses$ = this.loadingService.showLoaderUntilCompleted(courses$);
+    // //console.log(n);
+    // this.beginnerCourses$ = loadCourses$.pipe(
+    //   map((courses) =>
+    //     courses.filter((courses) => courses.category === "BEGINNER")
+    //   )
+    // );
+    // this.advancedCourses$ = loadCourses$.pipe(
+    //   map((courses) =>
+    //     courses.filter((courses) => courses.category === "ADVANCED")
+    //   )
+    // );
+    //MODO STATEFUL
+    
   }
 }
