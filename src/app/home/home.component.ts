@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit {
     //   )
     // );
     //MODO STATEFUL
-    
+    this.beginnerCourses$ = this.courseStore.filterByCategory("BEGINNER");
+    this.advancedCourses$ = this.courseStore.filterByCategory("ADVANCED");
   }
 }
