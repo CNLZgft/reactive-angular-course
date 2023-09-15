@@ -1,5 +1,6 @@
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   OnInit,
@@ -17,7 +18,7 @@ import {
 } from "rxjs";
 import { Lesson } from "../model/lesson";
 import { CoursesService } from "../services/courses.service";
-import { map, tap } from "rxjs/operators";
+import { map, startWith, tap } from "rxjs/operators";
 
 interface CourseData {
   course: Course;
@@ -28,6 +29,7 @@ interface CourseData {
   selector: "course",
   templateUrl: "./course.component.html",
   styleUrls: ["./course.component.css"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CourseComponent implements OnInit {
   //usando un observable
@@ -55,9 +57,16 @@ export class CourseComponent implements OnInit {
     // this.lessons$ = this.coursesService.loadAllCourseLessons(courseId);
 
     //usando un observable, con el combineLatest
-    const course$ = this.coursesService.loadCourseById(courseId);
+    const course$ = this.coursesService
+      .loadCourseById(courseId)
+      //para evitar el delay de la primera emisión del observable, la primera emisión será null
+      //para que pueda emitir el otro observable más rápidament si es necesario sin necesidad de esperar
+      //la primera carga, puesta que está vacía
+      .pipe(startWith());
 
-    const lessons$ = this.coursesService.loadAllCourseLessons(courseId);
+    const lessons$ = this.coursesService
+      .loadAllCourseLessons(courseId)
+      .pipe(startWith([]));
 
     //la posicion 0 emitira valores de course$ y la posicion 1 emitira valores de lessons$
     this.data$ = combineLatest([course$, lessons$]).pipe(
