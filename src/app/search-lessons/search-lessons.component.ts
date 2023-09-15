@@ -24,6 +24,8 @@ import {Lesson} from '../model/lesson';
 })
 export class SearchLessonsComponent implements OnInit {
 
+  searchResults$: Observable<Lesson[]>;
+
   constructor() {
 
 

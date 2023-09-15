@@ -5,15 +5,17 @@
     <mat-tab label="Beginners">
       <courses-card-list
         [courses]="beginnerCourses$ | async"
-        (coursesChanged)="reloadCourses()"
       ></courses-card-list>
     </mat-tab>
 
     <mat-tab label="Advanced">
       <courses-card-list
         [courses]="advancedCourses$ | async"
-        (coursesChanged)="reloadCourses()"
       ></courses-card-list>
     </mat-tab>
   </mat-tab-group>
 </div>
+
+<!--ya no es necesario ya que la nueva interfaz reflejara los cambios
+automaticamente sin necesidad de volver a llamar al servicio de carga de cursos-->
+<!--(coursesChanged)="reloadCourses()"-->
